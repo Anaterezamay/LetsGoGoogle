@@ -1,33 +1,25 @@
-# LetsGoGoogle
-Projeto final do curso Python para Jornalistas (Knight Center)
-#Atualização 1
-#não coloquei ainda como fazer o download auto da pasta com zip. #Vou começar a pinçar.
-ESTADO = input ('Digite a sigla do Estado desejado: ')
-ESTADO = ESTADO.upper()
-estado_codigo = (f'bem_candidato_2014_{ESTADO}.txt') 
-codigo_ler =(f'{estado_codigo}')
-arquivo = open(f'{estado_codigo}')
+#Escolha um ano. Só temos os dados disponíveis a partir de 2006
+ano = input ('Qual ano de eleição, a partir de 2006, você deseja consultar?')
 
-planilha = arquivo.read()
-print (planilha)
-arquivo.close()
+#Faz o Download e Unzip os arquivos txt dos candidatos
+from io import BytesIO
+from urllib.request import urlopen
+from zipfile import ZipFile
+zipurl = (f'http://agencia.tse.jus.br/estatistica/sead/odsele/consulta_cand/consulta_cand_{ano}.zip')
+print('Estamos apenas começando!')
 
-#Atualização 2
-ESTADO = input ('Digite a sigla do Estado desejado: ')
-ESTADO = ESTADO.upper()
-estado_codigo = (f'consulta_cand_2014_{ESTADO}.txt') 
-cod_ab = open(f'{estado_codigo}')
+with urlopen(zipurl) as zipresp:
+    with ZipFile(BytesIO(zipresp.read())) as zfile:
+        zfile.extractall('Candidatos')
+print('Calma, seus candidatos por ano já foram selecionados.')
 
-
-
-planilha = cod_ab.read()
-
-planilha = planilha.replace(";",",")
-planilha = planilha.replace("\"", "")
-
-lista = estado_codigo.strip("\r\n")
-lista = list(open(f'{estado_codigo}'))
-lista = [_str.split(' ') for _str in lista]
-print (lista)
-
-cod_ab.close()
+#Faz o Download e Unzip os arquivos txt dos bens
+from io import BytesIO
+from urllib.request import urlopen
+from zipfile import ZipFile
+zipurl = (f'http://agencia.tse.jus.br/estatistica/sead/odsele/bem_candidato/bem_candidato_{ano}.zip')
+print('Mais um pouquinho')
+with urlopen(zipurl) as zipresp:
+    with ZipFile(BytesIO(zipresp.read())) as zfile:
+        zfile.extractall('Bens')
+print('E agora os bens deles!')
